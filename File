@@ -74,3 +74,45 @@ INSERT INTO DEPARTMENT (dept_id, name, building, budget, university_id) VALUES (
 CREATE TABLE INSTRUCTOR (
 instructor_id NUMBER PRIMARY KEY,
 name VARCHAR2(50) NOT NULL
+
+
+
+CREATE TABLE INSTRUCTOR (
+instructor_id NUMBER PRIMARY KEY,
+name VARCHAR2(50) NOT NULL
+
+CREATE TABLE INSTRUCTOR (
+instructor_id NUMBER PRIMARY KEY
+name VARCHAR2(50) NOT NULL,
+dept_id NUMBER,
+is_hod CHAR(1) DEFAULT 'N' CHECK(is_hod IN ('Y','N')),
+salary NUMBER(10,2),
+CONSTRAINT fk_instructor_dept
+FOREIGN KEY (dept_id)
+REFERENCES DEPARTMENT(dept_id)
+);
+INSERT INTO INSTRUCTOR(instructor_id, name, dept_id, is_hod,salary) VALUES (1,'John Doe', 1, 'Y',80000);
+INSERT INTO INSTRUCTOR(instructor_id, name, dept_id, is_hod,salary) VALUES (1,'Jane Smith', 1, 'N',75000);
+
+CREATE TABLE COURSE (
+course_id VARCHAR(8) PRIMARY KEY,
+title VARCHAR(100) NOT NULL,
+dept_id INT,
+credits INT,
+FOREIGN KEY (dept_id) REFERENCES DEPARTMENT(dept_id)
+);
+INSERT INTO COURSE (course_id, title, dept_id, credits) VALUES ('CS-101', 'Introduction to Programming',1,3);
+INSERT INTO COURSE (course_id, title, dept_id, credits) VALUES ('CS-102', 'Data Structures',1,4);
+
+CREATE TABLE SECTION(
+section_id INT PRIMARY KEY,
+course_id VARCHAR(8),
+sec_id INT,
+semester VARCHAR(6), 
+year INT,
+building VARCHAR(50),
+room_number VARCHAR(10),
+time_slot_id VARCHAR(4),
+FOREIGN KEY (course_id)REFERENCES COURSE(course_id)
+);
+
