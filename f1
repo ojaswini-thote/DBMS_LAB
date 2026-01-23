@@ -1,0 +1,93 @@
+#Exp2 Creation of primary key
+
+CREATE TABLE UNIVERSITY (
+university_id INT PRIMARY KEY,
+name VARCHAR(100) NOT NULL
+);
+
+INSERT INTO UNIVERSITY (university_id, name) VALUES (1, 'Example University');
+INSERT INTO UNIVERSITY (university_id, name) VALUES (2, 'Another University');
+INSERT INTO UNIVERSITY (university_id, name) VALUES (3, 'Third University');
+INSERT INTO UNIVERSITY (university_id, name) VALUES (4, 'Fourth University');
+INSERT INTO UNIVERSITY (university_id, name) VALUES (5, 'Fifth University');
+INSERT INTO UNIVERSITY (university_id, name) VALUES (6, 'Sixth University');
+INSERT INTO UNIVERSITY (university_id, name) VALUES (7, 'Seventh University');
+
+#creation of Foreign Key
+CREATE TABLE DEPARTMENT(
+dept_id INT PRIMARY KEY,
+name VARCHAR(50) NOT NULL,
+building VARCHAR(50),
+budget DECIMAL(12,2),
+university_id INT,
+FOREIGN KEY (university_id) REFERENCES UNIVERSITY(university_id)
+);
+
+INSERT INTO DEPARTMENT (dept_id, name, building, budget, university_id) VALUES (1,'Computer Science','Taylor',100000,1);
+INSERT INTO DEPARTMENT (dept_id, name, building, budget, university_id) VALUES (2,'Mathematics','Watson',90000,1);
+INSERT INTO DEPARTMENT (dept_id, name, building, budget, university_id) VALUES (3,'Physics','Newton',95000,1);
+
+
+
+CREATE TABLE INSTRUCTOR (
+instructor_id NUMBER PRIMARY KEY,
+name VARCHAR2(50) NOT NULL,
+dept_id NUMBER,
+is_hod CHAR(1) DEFAULT 'N' CHECK(is_hod IN ('Y','N')),
+salary NUMBER(10,2),
+CONSTRAINT fk_instructor_dept
+FOREIGN KEY (dept_id)
+REFERENCES DEPARTMENT(dept_id)
+);
+INSERT INTO INSTRUCTOR(instructor_id, name, dept_id, is_hod,salary) VALUES (1,'John Doe', 1, 'Y',80000);
+INSERT INTO INSTRUCTOR(instructor_id, name, dept_id, is_hod,salary) VALUES (2,'Jane Smith', 1, 'N',75000);
+
+CREATE TABLE COURSE (
+course_id VARCHAR(8) PRIMARY KEY,
+title VARCHAR(100) NOT NULL,
+dept_id INT,
+credits INT,
+FOREIGN KEY (dept_id) REFERENCES DEPARTMENT(dept_id)
+);
+INSERT INTO COURSE (course_id, title, dept_id, credits) VALUES ('CS-101', 'Introduction to Programming',1,3);
+INSERT INTO COURSE (course_id, title, dept_id, credits) VALUES ('CS-102', 'Data Structures',1,4);
+
+CREATE TABLE SECTION(
+section_id INT PRIMARY KEY,
+course_id VARCHAR(8),
+sec_id INT,
+semester VARCHAR(6), 
+year INT,
+building VARCHAR(50),
+room_number VARCHAR(10),
+time_slot_id VARCHAR(4),
+FOREIGN KEY (course_id)REFERENCES COURSE(course_id)
+);
+
+INSERT INTO SECTION (section_id, course_id, sec_id, semester, year, building, room_number, time_slot_id) VALUES (1,'CS-101',1,'Fall',2023,'Taylor','3128','A');
+INSERT INTO SECTION (section_id, course_id, sec_id, semester, year, building, room_number, time_slot_id) VALUES (2,'CS-102',1,'Fall',2023,'Taylor','3128','A');
+
+CREATE TABLE TEACHES(
+instructor_id INT,
+section_id INT,
+PRIMARY KEY (instructor_id, section_id), 
+FOREIGN KEY (instructor_id) REFERENCES INSTRUCTOR(instructor_id),
+FOREIGN KEY (section_id) REFERENCES SECTION(section_id)
+);
+
+INSERT INTO TEACHES(instructor_id, section_id) VALUES(1,1);
+INSERT INTO TEACHES(instructor_id, section_id) VALUES(2,2);
+INSERT INTO TEACHES(instructor_id, section_id) VALUES(3,3);
+INSERT INTO TEACHES(instructor_id, section_id) VALUES(4,4);
+INSERT INTO TEACHES(instructor_id, section_id) VALUES(5,5);
+INSERT INTO TEACHES(instructor_id, section_id) VALUES(6,6);
+
+CREATE TABLE STUDENT (student_id INT PRIMARY KEY,
+name VARCHAR(50) NOT NULL,
+tot_cred INT
+);
+
+INSERT INTO STUDENT (student_id, name, tot_cred) VALUES (1, 'Mike Johnson', 60);
+INSERT INTO STUDENT (student_id, name, tot_cred) VALUES (2, 'Sarah Lee', 45);
+INSERT INTO STUDENT (student_id, name, tot_cred) VALUES (3, 'Tom Brown', 30);
+INSERT INTO STUDENT (student_id, name, tot_cred) VALUES (4, 'Emily Davis', 75);
